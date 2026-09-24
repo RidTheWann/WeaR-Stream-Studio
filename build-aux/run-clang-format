@@ -1,1 +1,11 @@
-.run-format.zsh
+#!/bin/sh
+# Launcher: resolve the formatter implementation relative to this file so it
+# works from any working directory. FORMATTER_NAME is passed explicitly
+# because ZSH_ARGZERO would otherwise see .run-format.zsh instead of us.
+set -eu
+
+script_dir=$(
+  CDPATH= cd -- "$(dirname -- "$0")" && pwd
+)
+
+FORMATTER_NAME=clang exec "${script_dir}/.run-format.zsh" "$@"
