@@ -24,7 +24,7 @@
 
 class QWidget;
 
-/* Gets the path of obs-studio specific data files (such as locale) */
+/* Gets the path of wear-stream-studio specific data files (such as locale) */
 bool GetDataFilePath(const char *data, std::string &path);
 
 std::string GetDefaultVideoSavePath();

@@ -1427,7 +1427,7 @@ static inline void LogD3DAdapters()
 
 static void CreateShaderCacheDirectory()
 {
-	BPtr cachePath = os_get_program_data_path_ptr("obs-studio/shader-cache");
+	BPtr cachePath = os_get_program_data_path_ptr("wear-stream-studio/shader-cache");
 
 	if (os_mkdirs(cachePath) == MKDIR_ERROR) {
 		blog(LOG_WARNING, "Failed to create shader cache directory, "

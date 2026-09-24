@@ -249,7 +249,7 @@ void gs_shader::Compile(const char *shaderString, const char *file, const char *
 	uint64_t hash = fnv1a_hash(shaderString, shaderStrLen);
 	snprintf(hashstr, sizeof(hashstr), "%02llx", hash);
 
-	BPtr program_data = os_get_program_data_path_ptr("obs-studio/shader-cache");
+	BPtr program_data = os_get_program_data_path_ptr("wear-stream-studio/shader-cache");
 	auto cachePath = std::filesystem::u8path(program_data.Get()) / hashstr;
 	// Increment if on-disk format changes
 	cachePath += ".v2";

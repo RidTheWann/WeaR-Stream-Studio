@@ -630,7 +630,7 @@ bool ffmpeg_mpegts_data_init(struct ffmpeg_output *stream, struct ffmpeg_data *d
 	}
 
 	avformat_alloc_output_context2(&data->output, output_format, NULL, data->config.url);
-	av_dict_set(&data->output->metadata, "service_provider", "obs-studio", 0);
+	av_dict_set(&data->output->metadata, "service_provider", "wear-stream-studio", 0);
 	av_dict_set(&data->output->metadata, "service_name", "mpegts output", 0);
 
 	if (!data->output) {

@@ -1350,7 +1350,7 @@ static void ClearShaderCache()
 {
 	wchar_t shader_path[MAX_PATH];
 	if (SHGetFolderPathW(NULL, CSIDL_COMMON_APPDATA, NULL, SHGFP_TYPE_CURRENT, shader_path) == S_OK) {
-		if (SUCCEEDED(StringCbCatW(shader_path, sizeof(shader_path), L"\\obs-studio\\shader-cache"))) {
+		if (SUCCEEDED(StringCbCatW(shader_path, sizeof(shader_path), L"\\wear-stream-studio\\shader-cache"))) {
 			filesystem::remove_all(shader_path);
 		}
 	}
@@ -1472,7 +1472,7 @@ static bool Update(wchar_t *cmdLine)
 		}
 	}
 
-	StringCbCat(lpAppDataPath, sizeof(lpAppDataPath), L"\\obs-studio");
+	StringCbCat(lpAppDataPath, sizeof(lpAppDataPath), L"\\wear-stream-studio");
 
 	/* ------------------------------------- *
 	 * Get download path                     */
@@ -1488,7 +1488,7 @@ static bool Update(wchar_t *cmdLine)
 		Status(L"Update failed: Failed to get temp path: %ld", GetLastError());
 		return false;
 	}
-	if (!GetTempFileNameW(tempDirName, L"obs-studio", 0, tempPath)) {
+	if (!GetTempFileNameW(tempDirName, L"wear-stream-studio", 0, tempPath)) {
 		Status(L"Update failed: Failed to create temp dir name: %ld", GetLastError());
 		return false;
 	}
