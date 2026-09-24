@@ -15,15 +15,13 @@ endif()
 set_property(GLOBAL APPEND PROPERTY OBS_FEATURES_ENABLED "Core Modules")
 
 macro(check_obs_browser)
+  # Windows-only fork (phase 2): non-Windows disable-target branch removed.
   if(OS_WINDOWS AND CMAKE_VS_PLATFORM_NAME MATCHES "(ARM64|x64)")
     if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/obs-browser/CMakeLists.txt")
       message(FATAL_ERROR "Required submodule 'obs-browser' not available.")
     else()
       add_core_module(obs-browser)
     endif()
-  else()
-    add_custom_target(obs-browser)
-    target_disable(obs-browser)
   endif()
 endmacro()
 

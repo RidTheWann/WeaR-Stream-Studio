@@ -41,9 +41,11 @@ if("${CMAKE_CURRENT_BINARY_DIR}" STREQUAL "${CMAKE_CURRENT_SOURCE_DIR}")
 endif()
 
 # Set default global project variables
-set(OBS_COMPANY_NAME "OBS Project")
-set(OBS_PRODUCT_NAME "OBS Studio")
-set(OBS_WEBSITE "https://www.obsproject.com")
+# WeaR Stream Studio (phase 2): product metadata rebranded. Internal target/
+# API names (libobs, obs-*, CMake target names) intentionally unchanged.
+set(OBS_COMPANY_NAME "WeaR Studio")
+set(OBS_PRODUCT_NAME "WeaR Stream Studio")
+set(OBS_WEBSITE "https://github.com/RidTheWann/WeaR-Stream-Studio")
 set(OBS_COMMENTS "Free and open source software for video recording and live streaming")
 set(OBS_LEGAL_COPYRIGHT "(C) Lain Bailey")
 set(OBS_CMAKE_VERSION 3.0.0)

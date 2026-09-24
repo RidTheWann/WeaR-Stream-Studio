@@ -18,11 +18,11 @@ if ( $env:CI -eq $null ) {
 }
 
 if ( ! ( [System.Environment]::Is64BitOperatingSystem ) ) {
-    throw "obs-studio requires a 64-bit system to build and run."
+    throw "wear-stream-studio requires a 64-bit system to build and run."
 }
 
 if ( $PSVersionTable.PSVersion -lt '7.2.0' ) {
-    Write-Warning 'The obs-studio packaging script requires PowerShell Core 7. Install or upgrade your PowerShell version: https://aka.ms/pscore6'
+    Write-Warning 'The wear-stream-studio packaging script requires PowerShell Core 7. Install or upgrade your PowerShell version: https://aka.ms/pscore6'
     exit 2
 }
 
@@ -51,9 +51,9 @@ function Package {
     $CommitDistance = $Tokens[-2]
 
     if ( $CommitDistance -gt 0 ) {
-        $OutputName = "obs-studio-${CommitVersion}-${CommitHash}"
+        $OutputName = "wear-stream-studio-${CommitVersion}-${CommitHash}"
     } else {
-        $OutputName = "obs-studio-${CommitVersion}"
+        $OutputName = "wear-stream-studio-${CommitVersion}"
     }
 
     $CpackArgs = @(
@@ -64,13 +64,13 @@ function Package {
         $CpackArgs += ('--verbose')
     }
 
-    Log-Group "Packaging obs-studio..."
+    Log-Group "Packaging wear-stream-studio..."
 
     Push-Location -Stack PackageTemp "build_${Target}"
 
     cpack @CpackArgs
 
-    $Package = Get-ChildItem -filter "obs-studio-*-windows-${Target}.zip" -File
+    $Package = Get-ChildItem -filter "wear-stream-studio-*-windows-${Target}.zip" -File
     Move-Item -Path $Package -Destination "${OutputName}-windows-${Target}.zip"
 
     Pop-Location -Stack PackageTemp
