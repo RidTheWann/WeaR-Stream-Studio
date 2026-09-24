@@ -1,3 +1,15 @@
+WeaR Stream Studio <https://github.com/RidTheWann/WeaR-Stream-Studio>
+==================
+Windows-only hard-fork of OBS Studio by WeaR Studio, starting at v1.0.0.
+See COPYING (GPLv2) and frontend/data/license/gplv2.txt; upstream
+attribution to the OBS Project is kept in the About dialog and AUTHORS.
+
+.. warning::
+   v1 releases are **not code-signed** (no Authenticode certificate yet).
+   Windows SmartScreen will warn on first launch — choose "More info" →
+   "Run anyway" only for builds downloaded from this repository's
+   official Releases page.
+
 OBS Studio <https://obsproject.com>
 ===================================
 

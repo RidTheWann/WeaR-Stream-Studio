@@ -8,25 +8,15 @@ on:
         required: true
         type: choice
         options:
-          - steam
           - services
           - translations
           - documentation
-          - patches
       ref:
         description: GitHub reference to use for job
         type: string
         required: false
       customAssetWindows:
         description: Custom Windows build for Steam Upload
-        type: string
-        required: false
-      customAssetMacOSApple:
-        description: Custom macOS Apple Silicon build for Steam Upload
-        type: string
-        required: false
-      customAssetMacOSIntel:
-        description: Custom macOS Intel build for Steam Upload
         type: string
         required: false
       channel:
@@ -69,24 +59,6 @@ jobs:
           token: ${{ secrets.CROWDIN_SYNC_GITHUB_PAT }}
           fetch-depth: 0
       - uses: obsproject/obs-crowdin-sync/download@4b488c7ced03aa109d9f12529bd91c26c54b3e89
-
-  steam-upload:
-    name: Upload Steam Builds 🚂
-    if: github.repository_owner == 'obsproject' && inputs.job == 'steam'
-    runs-on: macos-26
-    steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-      - uses: ./.github/actions/steam-upload
-        with:
-          steamSecret: ${{ secrets.STEAM_SHARED_SECRET }}
-          steamUser: ${{ secrets.STEAM_USER }}
-          steamPassword: ${{ secrets.STEAM_PASSWORD }}
-          tagName: ${{ inputs.ref }}
-          customAssetWindows: ${{ inputs.customAssetWindows }}
-          customAssetMacOSApple: ${{ inputs.customAssetMacOSApple }}
-          customAssetMacOSIntel: ${{ inputs.customAssetMacOSIntel }}
-          workflowSecret: ${{ github.token }}
-          preview: false
 
   update-documentation:
     name: Update Documentation 📖
@@ -136,16 +108,3 @@ jobs:
           accountId: ${{ secrets.CF_ACCOUNT_ID }}
           command: pages publish . --project-name=${{ vars.CF_PAGES_PROJECT }} --commit-hash='${{ steps.setup.outputs.commitHash }}'
 
-  windows-patches:
-    name: Create Windows Patches 🩹
-    if: github.repository_owner == 'obsproject' && inputs.job == 'patches'
-    runs-on: windows-2025-vs2026
-    steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-      - uses: ./.github/actions/windows-patches
-        with:
-          tagName: ${{ inputs.ref }}
-          workflowSecret: ${{ github.token }}
-          channel: ${{ inputs.channel }}
-          gcsAccessKeyId: ${{ secrets.GCS_ACCESS_KEY_ID }}
-          gcsAccessKeySecret: ${{ secrets.GCS_ACCESS_KEY_SECRET }}

@@ -18,11 +18,11 @@ if ( $env:CI -eq $null ) {
 }
 
 if ( ! ( [System.Environment]::Is64BitOperatingSystem ) ) {
-    throw "obs-studio requires a 64-bit system to build and run."
+    throw "wear-stream-studio requires a 64-bit system to build and run."
 }
 
 if ( $PSVersionTable.PSVersion -lt '7.2.0' ) {
-    Write-Warning 'The obs-studio PowerShell build script requires PowerShell Core 7. Install or upgrade your PowerShell version: https://aka.ms/pscore6'
+    Write-Warning 'The wear-stream-studio PowerShell build script requires PowerShell Core 7. Install or upgrade your PowerShell version: https://aka.ms/pscore6'
     exit 2
 }
 
@@ -73,13 +73,13 @@ function Build {
         '--config', $Configuration
     )
 
-    Log-Group "Configuring obs-studio..."
+    Log-Group "Configuring wear-stream-studio..."
     Invoke-External cmake @CmakeArgs
 
-    Log-Group "Building obs-studio..."
+    Log-Group "Building wear-stream-studio..."
     Invoke-External cmake @CmakeBuildArgs
 
-    Log-Group "Installing obs-studio..."
+    Log-Group "Installing wear-stream-studio..."
     Invoke-External cmake @CmakeInstallArgs
 
     Pop-Location -Stack BuildTemp

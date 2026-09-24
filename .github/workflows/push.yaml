@@ -136,22 +136,13 @@ jobs:
           accountId: ${{ secrets.CF_ACCOUNT_ID }}
           command: pages publish . --project-name=${{ vars.CF_PAGES_PROJECT }} --commit-hash='${{ steps.setup.outputs.commitHash }}'
 
-  sign-windows-build:
-    name: Windows Signing ✍️
-    uses: obsproject/obs-studio/.github/workflows/sign-windows.yaml@ac19ea663375cd02997be92b7d8ff6dd89a511ad
-    if: github.repository_owner == 'obsproject' && github.ref_type == 'tag'
-    needs: build-project
-    permissions:
-      contents: 'read'
-      id-token: 'write'
-      attestations: 'write'
-    secrets: inherit
-
+  # WeaR Stream Studio (phase 4): no code signing in v1 (CODE_SIGNING=tidak).
+  # Unsigned builds ship as-is; see README.rst (SmartScreen warning).
   create-release:
     name: Create Release 🛫
     if: github.ref_type == 'tag'
     runs-on: ubuntu-26.04
-    needs: [build-project, sign-windows-build]
+    needs: [build-project]
     defaults:
       run:
         shell: bash
@@ -163,13 +154,14 @@ jobs:
           if [[ "${RUNNER_DEBUG}" ]]; then set -x; fi
           shopt -s extglob
 
+          # WeaR Stream Studio version scheme: v1.0.0, v1.0.1, v1.1.0-beta1, ...
           case "${GITHUB_REF_NAME}" in
-            +([0-9]).+([0-9]).+([0-9]) )
+            v?([0-9]).+([0-9]).+([0-9]) )
               echo 'validTag=true' >> $GITHUB_OUTPUT
               echo 'prerelease=false' >> $GITHUB_OUTPUT
               echo "version=${GITHUB_REF_NAME}" >> $GITHUB_OUTPUT
               ;;
-            +([0-9]).+([0-9]).+([0-9])-@(beta|rc)*([0-9]) )
+            v?([0-9]).+([0-9]).+([0-9])-@(beta|rc)*([0-9]) )
               echo 'validTag=true' >> $GITHUB_OUTPUT
               echo 'prerelease=true' >> $GITHUB_OUTPUT
               echo "version=${GITHUB_REF_NAME}" >> $GITHUB_OUTPUT
@@ -190,44 +182,16 @@ jobs:
           root_dir="${PWD}"
 
           commit_hash="${GITHUB_SHA:0:9}"
-          macos_arm64_artifact_name="obs-studio-macos-arm64-${commit_hash}"
-          macos_arm64_dsym_artifact_name="obs-studio-macos-arm64-${commit_hash}-dSYMs"
-          macos_intel_artifact_name="obs-studio-macos-x86_64-${commit_hash}"
-          macos_intel_dsym_artifact_name="obs-studio-macos-x86_64-${commit_hash}-dSYMs"
-          ubuntu_2604_x86_64_artifact_name="obs-studio-ubuntu-26.04-x86_64-${commit_hash}"
-          ubuntu_2604_x86_64_debug_name="obs-studio-ubuntu-26.04-x86_64-${commit_hash}-dbgsym"
-          ubuntu_2604_sources_name="obs-studio-ubuntu-26.04-sources-${commit_hash}"
-          windows_x64_artifact_name="obs-studio-windows-x64-${{ steps.check.outputs.version }}-signed"
-          windows_x64_installer_name="obs-studio-windows-x64-${{ steps.check.outputs.version }}-installer"
-          windows_x64_debug_name="obs-studio-windows-x64-${{ steps.check.outputs.version }}-pdbs"
-          windows_arm64_artifact_name="obs-studio-windows-arm64-${{ steps.check.outputs.version }}-signed"
-          windows_arm64_debug_name="obs-studio-windows-arm64-${{ steps.check.outputs.version }}-pdbs"
+          # v1 artifacts are unsigned portable ZIPs from CPack (no installer
+          # .exe without the signing pipeline; see sign-windows.yaml).
+          windows_x64_artifact_name="wear-stream-studio-windows-x64-${commit_hash}"
+          windows_arm64_artifact_name="wear-stream-studio-windows-arm64-${commit_hash}"
 
           echo '::group::Renaming Artifacts'
-          mv -v "${macos_arm64_artifact_name}/"obs-studio-*-macos-apple.dmg \
-            "${root_dir}"/OBS-Studio-${{ steps.check.outputs.version }}-macOS-Apple.dmg
-          mv -v "${macos_arm64_dsym_artifact_name}/"obs-studio-*-macos-apple-dSYMs.tar.xz \
-            "${root_dir}"/OBS-Studio-${{ steps.check.outputs.version }}-macOS-Apple-dSYMs.tar.xz
-          mv -v "${macos_intel_artifact_name}/"obs-studio-*-macos-intel.dmg \
-            "${root_dir}"/OBS-Studio-${{ steps.check.outputs.version }}-macOS-Intel.dmg
-          mv -v "${macos_intel_dsym_artifact_name}/"obs-studio-*-macos-intel-dSYMs.tar.xz \
-            "${root_dir}"/OBS-Studio-${{ steps.check.outputs.version }}-macOS-Intel-dSYMs.tar.xz
-          mv -v "${ubuntu_2604_x86_64_artifact_name}/"obs-studio-*-x86_64-ubuntu-gnu.deb \
-            "${root_dir}"/OBS-Studio-${{ steps.check.outputs.version }}-Ubuntu-26.04-x86_64.deb
-          mv -v "${ubuntu_2604_x86_64_debug_name}/"obs-studio-*-x86_64-ubuntu-gnu-dbgsym.ddeb \
-            "${root_dir}"/OBS-Studio-${{ steps.check.outputs.version }}-Ubuntu-26.04-x86_64-dbsym.ddeb
-          mv -v "${ubuntu_2604_sources_name}/"obs-studio-*-sources.tar.gz \
-            "${root_dir}"/OBS-Studio-${{ steps.check.outputs.version }}-Sources.tar.gz
-          mv -v "${windows_x64_artifact_name}/"OBS-Studio-*.zip \
-            "${root_dir}"/OBS-Studio-${{ steps.check.outputs.version }}-Windows-x64.zip
-          mv -v "${windows_x64_installer_name}/"OBS-Studio-*.exe \
-            "${root_dir}"/OBS-Studio-${{ steps.check.outputs.version }}-Windows-x64-Installer.exe
-          mv -v "${windows_x64_debug_name}/"OBS-Studio-*-pdbs.zip \
-            "${root_dir}"/OBS-Studio-${{ steps.check.outputs.version }}-Windows-x64-PDBs.zip
-          mv -v "${windows_arm64_artifact_name}/"OBS-Studio-*.zip \
-            "${root_dir}"/OBS-Studio-${{ steps.check.outputs.version }}-Windows-arm64.zip
-          mv -v "${windows_arm64_debug_name}/"OBS-Studio-*-pdbs.zip \
-            "${root_dir}"/OBS-Studio-${{ steps.check.outputs.version }}-Windows-arm64-PDBs.zip
+          mv -v "${windows_x64_artifact_name}/"wear-stream-studio-*-windows-x64.zip \
+            "${root_dir}"/WeaR-Stream-Studio-${{ steps.check.outputs.version }}-Windows-x64.zip
+          mv -v "${windows_arm64_artifact_name}/"wear-stream-studio-*-windows-arm64.zip \
+            "${root_dir}"/WeaR-Stream-Studio-${{ steps.check.outputs.version }}-Windows-arm64.zip
           echo '::endgroup::'
 
       - name: Generate Checksums 🪪
@@ -250,16 +214,8 @@ jobs:
           draft: true
           prerelease: ${{ fromJSON(steps.check.outputs.prerelease) }}
           tag_name: ${{ steps.check.outputs.version }}
-          name: OBS Studio ${{ steps.check.outputs.version }}
+          name: WeaR Stream Studio ${{ steps.check.outputs.version }}
           body_path: ${{ github.workspace }}/CHECKSUMS.txt
           files: |
-            ${{ github.workspace }}/OBS-Studio-${{ steps.check.outputs.version }}-macOS-*.dmg
-            ${{ github.workspace }}/OBS-Studio-${{ steps.check.outputs.version }}-macOS-*-dSYMs.tar.xz
-            ${{ github.workspace }}/OBS-Studio-${{ steps.check.outputs.version }}-Ubuntu-*.deb
-            ${{ github.workspace }}/OBS-Studio-${{ steps.check.outputs.version }}-Ubuntu-*.ddeb
-            ${{ github.workspace }}/OBS-Studio-${{ steps.check.outputs.version }}-Sources.tar.gz
-            ${{ github.workspace }}/OBS-Studio-${{ steps.check.outputs.version }}-Windows-x64.zip
-            ${{ github.workspace }}/OBS-Studio-${{ steps.check.outputs.version }}-Windows-x64-Installer.exe
-            ${{ github.workspace }}/OBS-Studio-${{ steps.check.outputs.version }}-Windows-x64-PDBs.zip
-            ${{ github.workspace }}/OBS-Studio-${{ steps.check.outputs.version }}-Windows-arm64.zip
-            ${{ github.workspace }}/OBS-Studio-${{ steps.check.outputs.version }}-Windows-arm64-PDBs.zip
+            ${{ github.workspace }}/WeaR-Stream-Studio-${{ steps.check.outputs.version }}-Windows-x64.zip
+            ${{ github.workspace }}/WeaR-Stream-Studio-${{ steps.check.outputs.version }}-Windows-arm64.zip
