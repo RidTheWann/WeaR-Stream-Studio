@@ -72,7 +72,9 @@ bool opt_start_virtualcam = false;
 bool opt_minimize_tray = false;
 bool opt_allow_opengl = false;
 bool opt_always_on_top = false;
-bool opt_disable_updater = false;
+// WeaR Stream Studio (phase 3): self-hosted updater not available in v1,
+// updates are disabled by default. Re-enable with --enable-updater.
+bool opt_disable_updater = true;
 bool opt_disable_missing_files_check = false;
 string opt_starting_collection;
 string opt_starting_profile;
@@ -819,7 +821,7 @@ static inline bool arg_is(const char *arg, const char *long_form, const char *sh
 
 #ifdef _WIN32
 static constexpr char vcRunErrorTitle[] = "Outdated Visual C++ Runtime";
-static constexpr char vcRunErrorMsg[] = "OBS Studio requires a newer version of the Microsoft Visual C++ "
+static constexpr char vcRunErrorMsg[] = "WeaR Stream Studio requires a newer version of the Microsoft Visual C++ "
 					"Redistributables.\n\nYou will now be directed to the download page.";
 static constexpr char vcRunInstallerUrl[] = "https://obsproject.com/visual-studio-2022-runtimes";
 
@@ -1017,6 +1019,9 @@ int main(int argc, char *argv[])
 		} else if (arg_is(argv[i], "--disable-updater", nullptr)) {
 			opt_disable_updater = true;
 
+		} else if (arg_is(argv[i], "--enable-updater", nullptr)) {
+			opt_disable_updater = false;
+
 		} else if (arg_is(argv[i], "--disable-missing-files-check", nullptr)) {
 			opt_disable_missing_files_check = true;
 
@@ -1056,7 +1061,7 @@ int main(int argc, char *argv[])
 			exit(0);
 
 		} else if (arg_is(argv[i], "--version", "-V")) {
-			std::cout << "OBS Studio - " << App()->GetVersionString(false) << "\n";
+			std::cout << "WeaR Stream Studio - " << App()->GetVersionString(false) << "\n";
 			exit(0);
 		}
 	}

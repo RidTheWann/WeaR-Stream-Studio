@@ -33,16 +33,12 @@ OBSAbout::OBSAbout(QWidget *parent) : QDialog(parent), ui(new Ui::OBSAbout)
 
 	ui->contribute->setText(QTStr("About.Contribute"));
 
-	if (steam) {
-		delete ui->donate;
-	} else {
-		ui->donate->setText("&nbsp;&nbsp;<a href='https://obsproject.com/contribute'>" + QTStr("About.Donate") +
-				    "</a>");
-		ui->donate->setTextInteractionFlags(Qt::TextBrowserInteraction);
-		ui->donate->setOpenExternalLinks(true);
-	}
+	// WeaR Stream Studio (phase 3): no donation program in v1; OBS Project
+	// links replaced with the fork repository. GPLv2 license text and
+	// attribution to OBS Project as upstream codebase are kept below.
+	delete ui->donate;
 
-	ui->getInvolved->setText("&nbsp;&nbsp;<a href='https://obsproject.com/developer-contributing'>" +
+	ui->getInvolved->setText("&nbsp;&nbsp;<a href='https://github.com/RidTheWann/WeaR-Stream-Studio'>" +
 				 QTStr("About.GetInvolved") + "</a>");
 	ui->getInvolved->setTextInteractionFlags(Qt::TextBrowserInteraction);
 	ui->getInvolved->setOpenExternalLinks(true);
@@ -64,63 +60,22 @@ OBSAbout::OBSAbout(QWidget *parent) : QDialog(parent), ui(new Ui::OBSAbout)
 
 	QPointer<OBSAbout> about(this);
 
-	OBSBasic *main = OBSBasic::Get();
-	if (main->patronJson.empty() && !main->patronJsonThread) {
-		RemoteTextThread *thread =
-			new RemoteTextThread("https://obsproject.com/patreon/about-box.json", "application/json");
-		QObject::connect(thread, &RemoteTextThread::Result, main, &OBSBasic::UpdatePatronJson);
-		QObject::connect(thread, &RemoteTextThread::Result, this, &OBSAbout::ShowAbout);
-		main->patronJsonThread.reset(thread);
-		thread->start();
-	} else {
-		ShowAbout();
-	}
+	// No patron feed in v1: show static fork info instead of fetching
+	// OBS Project patron data.
+	ShowAbout();
 }
 
 void OBSAbout::ShowAbout()
 {
-	OBSBasic *main = OBSBasic::Get();
-
-	if (main->patronJson.empty()) {
-		return;
-	}
-
-	std::string error;
-	Json json = Json::parse(main->patronJson, error);
-	const Json::array &patrons = json.array_items();
 	QString text;
 
-	text += "<h1>Top Patreon contributors:</h1>";
+	text += "<h1>WeaR Stream Studio</h1>";
 	text += "<p style=\"font-size:16px;\">";
-	bool first = true;
-	bool top = true;
-
-	for (const Json &patron : patrons) {
-		std::string name = patron["name"].string_value();
-		std::string link = patron["link"].string_value();
-		int amount = patron["amount"].int_value();
-
-		if (top && amount < 5000) {
-			text += "</p>";
-			top = false;
-		} else if (!first) {
-			text += "<br/>";
-		}
-
-		if (!link.empty()) {
-			text += "<a href=\"";
-			text += QT_UTF8(link.c_str()).toHtmlEscaped();
-			text += "\">";
-		}
-		text += QT_UTF8(name.c_str()).toHtmlEscaped();
-		if (!link.empty()) {
-			text += "</a>";
-		}
-
-		if (first) {
-			first = false;
-		}
-	}
+	text += "Free and open source video recording and live streaming software.<br/>";
+	text += "Based on OBS Studio by the OBS Project, licensed under GPLv2.<br/>";
+	text += "<a href=\"https://github.com/RidTheWann/WeaR-Stream-Studio\">";
+	text += "https://github.com/RidTheWann/WeaR-Stream-Studio</a>";
+	text += "</p>";
 
 	ui->textBrowser->setHtml(text);
 }
@@ -128,13 +83,10 @@ void OBSAbout::ShowAbout()
 void OBSAbout::ShowAuthors()
 {
 	std::string path;
-	QString error = QTStr("About.Error").arg("https://github.com/obsproject/obs-studio/blob/master/AUTHORS");
+	QString error =
+		QTStr("About.Error").arg("https://github.com/RidTheWann/WeaR-Stream-Studio/blob/master/AUTHORS");
 
-#ifdef __APPLE__
-	if (!GetDataFilePath("AUTHORS", path)) {
-#else
 	if (!GetDataFilePath("authors/AUTHORS", path)) {
-#endif
 		ui->textBrowser->setPlainText(error);
 		return;
 	}
@@ -154,7 +106,8 @@ void OBSAbout::ShowAuthors()
 void OBSAbout::ShowLicense()
 {
 	std::string path;
-	QString error = QTStr("About.Error").arg("https://github.com/obsproject/obs-studio/blob/master/COPYING");
+	QString error =
+		QTStr("About.Error").arg("https://github.com/RidTheWann/WeaR-Stream-Studio/blob/master/COPYING");
 
 	if (!GetDataFilePath("license/gplv2.txt", path)) {
 		ui->textBrowser->setPlainText(error);

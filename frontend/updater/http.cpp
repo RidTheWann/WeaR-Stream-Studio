@@ -74,7 +74,7 @@ bool HTTPPostData(const wchar_t *url, const BYTE *data, int dataLen, const wchar
 	/* -------------------------------------- *
 	 * connect to server                      */
 
-	hSession = WinHttpOpen(L"OBS Studio Updater/3.0", WINHTTP_ACCESS_TYPE_AUTOMATIC_PROXY, WINHTTP_NO_PROXY_NAME,
+	hSession = WinHttpOpen(L"WeaR Stream Studio Updater/3.0", WINHTTP_ACCESS_TYPE_AUTOMATIC_PROXY, WINHTTP_NO_PROXY_NAME,
 			       WINHTTP_NO_PROXY_BYPASS, 0);
 	if (!hSession) {
 		*responseCode = -1;

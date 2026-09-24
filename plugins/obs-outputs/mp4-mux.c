@@ -2024,7 +2024,7 @@ static size_t mp4_write_ilst(struct mp4_mux *mux)
 	write_box(s, 0, "ilst");
 
 	/* Encoder name */
-	dstr_cat(&value, "OBS Studio (");
+	dstr_cat(&value, "WeaR Stream Studio (");
 	dstr_cat(&value, obs_get_version_string());
 	dstr_cat(&value, ")");
 	/* Some QuickTime keys are prefixed with 0xa9 */
@@ -2130,7 +2130,7 @@ static void mp4_write_mdta_kv(struct mp4_mux *mux)
 
 	obs_data_t *meta = obs_data_create();
 
-	dstr_cat(&value, "OBS Studio (");
+	dstr_cat(&value, "WeaR Stream Studio (");
 	dstr_cat(&value, obs_get_version_string());
 	dstr_cat(&value, ")");
 
@@ -2181,7 +2181,7 @@ static size_t mp4_write_udta(struct mp4_mux *mux)
 		struct dstr value = {0};
 
 		/* Encoder name */
-		dstr_cat(&value, "OBS Studio (");
+		dstr_cat(&value, "WeaR Stream Studio (");
 		dstr_cat(&value, obs_get_version_string());
 		dstr_cat(&value, ")");
 		mp4_write_string_data_atom(mux, "\251swr", value.array);

@@ -10,20 +10,15 @@
 
 #include "moc_AuthListener.cpp"
 
-#define LOGO_URL "https://obsproject.com/assets/images/new_icon_small-r.png"
-
 static const QString serverResponseHeader = QStringLiteral("HTTP/1.0 200 OK\n"
 							   "Connection: close\n"
 							   "Content-Type: text/html; charset=UTF-8\n"
-							   "Server: OBS Studio\n"
+							   "Server: WeaR Stream Studio\n"
 							   "\n"
-							   "<html><head><title>OBS Studio"
+							   "<html><head><title>WeaR Stream Studio"
 							   "</title></head>");
 
 static const QString responseTemplate = "<center>"
-					"<img src=\"" LOGO_URL
-					"\" alt=\"OBS\" class=\"center\"  height=\"60\" width=\"60\">"
-					"</center>"
 					"<center><p style=\"font-family:verdana; font-size:13pt\">%1</p></center>";
 
 AuthListener::AuthListener(QObject *parent) : QObject(parent)

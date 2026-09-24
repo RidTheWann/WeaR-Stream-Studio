@@ -47,7 +47,7 @@ set(OBS_COMPANY_NAME "WeaR Studio")
 set(OBS_PRODUCT_NAME "WeaR Stream Studio")
 set(OBS_WEBSITE "https://github.com/RidTheWann/WeaR-Stream-Studio")
 set(OBS_COMMENTS "Free and open source software for video recording and live streaming")
-set(OBS_LEGAL_COPYRIGHT "(C) Lain Bailey")
+set(OBS_LEGAL_COPYRIGHT "(C) WeaR Studio. Based on OBS Studio by OBS Project")
 set(OBS_CMAKE_VERSION 3.0.0)
 
 # Configure default version strings

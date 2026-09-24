@@ -47,7 +47,7 @@ intptr_t VSTPlugin::hostCallback_static(AEffect *effect, int32_t opcode, int32_t
 		return 0;
 
 	case audioMasterGetVendorString:
-		strncpy((char *)ptr, "OBS Studio", 11);
+		strncpy((char *)ptr, "WeaR Stream Studio", 19);
 		return 1;
 
 	case audioMasterGetTime:

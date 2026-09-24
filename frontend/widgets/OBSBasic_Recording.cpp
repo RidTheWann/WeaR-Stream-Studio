@@ -304,12 +304,7 @@ void OBSBasic::PauseRecording()
 
 		TaskbarOverlaySetStatus(TaskbarOverlayStatusPaused);
 		if (trayIcon && trayIcon->isVisible()) {
-#ifdef __APPLE__
-			QIcon trayIconFile = QIcon(":/res/images/obs_paused_macos.svg");
-			trayIconFile.setIsMask(true);
-#else
 			QIcon trayIconFile = QIcon(":/res/images/obs_paused.png");
-#endif
 			trayIcon->setIcon(QIcon::fromTheme("obs-tray-paused", trayIconFile));
 		}
 
@@ -339,12 +334,7 @@ void OBSBasic::UnpauseRecording()
 
 		TaskbarOverlaySetStatus(TaskbarOverlayStatusActive);
 		if (trayIcon && trayIcon->isVisible()) {
-#ifdef __APPLE__
-			QIcon trayIconFile = QIcon(":/res/images/tray_active_macos.svg");
-			trayIconFile.setIsMask(true);
-#else
 			QIcon trayIconFile = QIcon(":/res/images/tray_active.png");
-#endif
 			trayIcon->setIcon(QIcon::fromTheme("obs-tray-active", trayIconFile));
 		}
 

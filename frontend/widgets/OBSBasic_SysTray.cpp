@@ -23,14 +23,10 @@ extern bool opt_minimize_tray;
 
 void OBSBasic::SystemTrayInit()
 {
-#ifdef __APPLE__
-	QIcon trayIconFile = QIcon(":/res/images/obs_macos.svg");
-	trayIconFile.setIsMask(true);
-#else
+	// Windows-only fork: macOS tray mask icon removed (phase 3).
 	QIcon trayIconFile = QIcon(":/res/images/obs.png");
-#endif
 	trayIcon = new QSystemTrayIcon(QIcon::fromTheme("obs-tray", trayIconFile), this);
-	trayIcon->setToolTip("OBS Studio");
+	trayIcon->setToolTip("WeaR Stream Studio");
 
 	trayMenu = new QMenu(this);
 
@@ -102,7 +98,7 @@ void OBSBasic::SysTrayNotify(const QString &text, QSystemTrayIcon::MessageIcon n
 {
 	if (trayIcon && trayIcon->isVisible() && QSystemTrayIcon::supportsMessages()) {
 		QSystemTrayIcon::MessageIcon icon = QSystemTrayIcon::MessageIcon(n);
-		trayIcon->showMessage("OBS Studio", text, icon, 10000);
+		trayIcon->showMessage("WeaR Stream Studio", text, icon, 10000);
 	}
 }
 

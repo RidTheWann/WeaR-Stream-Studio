@@ -705,14 +705,8 @@ private:
 
 			TaskbarOverlaySetStatus(TaskbarOverlayStatusActive);
 			if (trayIcon && trayIcon->isVisible()) {
-#ifdef __APPLE__
-				QIcon trayMask = QIcon(":/res/images/tray_active_macos.svg");
-				trayMask.setIsMask(true);
-				trayIcon->setIcon(QIcon::fromTheme("obs-tray", trayMask));
-#else
 				trayIcon->setIcon(
 					QIcon::fromTheme("obs-tray-active", QIcon(":/res/images/tray_active.png")));
-#endif
 			}
 		}
 	}
@@ -727,31 +721,16 @@ private:
 
 			TaskbarOverlaySetStatus(TaskbarOverlayStatusInactive);
 			if (trayIcon && trayIcon->isVisible()) {
-#ifdef __APPLE__
-				QIcon trayIconFile = QIcon(":/res/images/obs_macos.svg");
-				trayIconFile.setIsMask(true);
-#else
 				QIcon trayIconFile = QIcon(":/res/images/obs.png");
-#endif
 				trayIcon->setIcon(QIcon::fromTheme("obs-tray", trayIconFile));
 			}
 		} else if (outputHandler->Active() && trayIcon && trayIcon->isVisible()) {
 			if (os_atomic_load_bool(&recording_paused)) {
-#ifdef __APPLE__
-				QIcon trayIconFile = QIcon(":/res/images/obs_paused_macos.svg");
-				trayIconFile.setIsMask(true);
-#else
 				QIcon trayIconFile = QIcon(":/res/images/obs_paused.png");
-#endif
 				trayIcon->setIcon(QIcon::fromTheme("obs-tray-paused", trayIconFile));
 				TaskbarOverlaySetStatus(TaskbarOverlayStatusPaused);
 			} else {
-#ifdef __APPLE__
-				QIcon trayIconFile = QIcon(":/res/images/tray_active_macos.svg");
-				trayIconFile.setIsMask(true);
-#else
 				QIcon trayIconFile = QIcon(":/res/images/tray_active.png");
-#endif
 				trayIcon->setIcon(QIcon::fromTheme("obs-tray-active", trayIconFile));
 				TaskbarOverlaySetStatus(TaskbarOverlayStatusActive);
 			}
