@@ -5,7 +5,7 @@ include_guard(GLOBAL)
 set(_obs_version ${_obs_default_version})
 set(_obs_version_canonical ${_obs_default_version})
 
-# Attempt to automatically discover expected OBS version
+# Attempt to automatically discover the project version.
 if(NOT DEFINED OBS_VERSION_OVERRIDE AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/.git")
   execute_process(
     COMMAND git describe --always --tags --dirty=-modified
@@ -17,22 +17,38 @@ if(NOT DEFINED OBS_VERSION_OVERRIDE AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/.git
   )
 
   if(_git_describe_err)
-    message(FATAL_ERROR "Could not fetch OBS version tag from git.\n" ${_git_describe_err})
+    message(FATAL_ERROR "Could not fetch project version from git.\n${_git_describe_err}")
   endif()
 
-  if(_obs_version_result EQUAL 0)
-    string(REGEX REPLACE "([0-9]+)\\.([0-9]+)\\.([0-9]+).*" "\\1;\\2;\\3" _obs_version_canonical ${_obs_version})
-  endif()
-elseif(DEFINED OBS_VERSION_OVERRIDE)
-  if(OBS_VERSION_OVERRIDE MATCHES "([0-9]+)\\.([0-9]+)\\.([0-9]+).*")
+  # git describe can return a bare commit hash when no tag is reachable.
+  # Only use values that begin with a semantic version; otherwise fall back
+  # to the configured default version (WeaR Stream Studio: untagged forks).
+  if(
+    _obs_version_result EQUAL 0
+    AND _obs_version MATCHES "^v?([0-9]+)\\.([0-9]+)\\.([0-9]+)([-+].*)?$"
+  )
     string(
       REGEX REPLACE
-      "([0-9]+)\\.([0-9]+)\\.([0-9]+).*"
+      "^v?([0-9]+)\\.([0-9]+)\\.([0-9]+).*"
       "\\1;\\2;\\3"
       _obs_version_canonical
-      ${OBS_VERSION_OVERRIDE}
+      "${_obs_version}"
     )
-    set(_obs_version ${OBS_VERSION_OVERRIDE})
+  else()
+    message(STATUS "No semantic-version Git tag found; using default version 0.0.1")
+    set(_obs_version "0.0.1")
+    set(_obs_version_canonical ${_obs_default_version})
+  endif()
+elseif(DEFINED OBS_VERSION_OVERRIDE)
+  if(OBS_VERSION_OVERRIDE MATCHES "^v?([0-9]+)\\.([0-9]+)\\.([0-9]+)([-+].*)?$")
+    string(
+      REGEX REPLACE
+      "^v?([0-9]+)\\.([0-9]+)\\.([0-9]+).*"
+      "\\1;\\2;\\3"
+      _obs_version_canonical
+      "${OBS_VERSION_OVERRIDE}"
+    )
+    set(_obs_version "${OBS_VERSION_OVERRIDE}")
   else()
     message(FATAL_ERROR "Invalid version supplied - must be <MAJOR>.<MINOR>.<PATCH>[-(rc|beta)<NUMBER>].")
   endif()
