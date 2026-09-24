@@ -5,8 +5,6 @@ if(ENABLE_SCRIPTING_PYTHON)
 
   if(OS_WINDOWS)
     find_package(Python 3.8...<3.11 REQUIRED Interpreter Development)
-  elseif(OS_LINUX OR OS_FREEBSD OR OS_OPENBSD)
-    find_package(Python 3.8 REQUIRED Interpreter Development)
   else()
     find_package(Python 3.8...<3.12 REQUIRED Interpreter Development)
   endif()
@@ -18,7 +16,7 @@ if(ENABLE_SCRIPTING_PYTHON)
     COMMAND ${CMAKE_COMMAND} -E make_directory swig
     COMMAND
       ${CMAKE_COMMAND} -E env "SWIG_LIB=${SWIG_DIR}" ${SWIG_EXECUTABLE} -python
-      $<$<PLATFORM_ID:Windows,Darwin>:-py3-stable-abi> -external-runtime swig/swigpyrun.h
+      $<$<PLATFORM_ID:Windows>:-py3-stable-abi> -external-runtime swig/swigpyrun.h
     COMMENT "obs-scripting - generating Python 3 SWIG interface headers"
   )
 
@@ -28,7 +26,7 @@ if(ENABLE_SCRIPTING_PYTHON)
     obs-scripting
     PRIVATE
       $<$<BOOL:${ENABLE_FRONTEND}>:obs-scripting-python-frontend.c>
-      $<$<PLATFORM_ID:Windows,Darwin>:obs-scripting-python-import.c>
+      $<$<PLATFORM_ID:Windows>:obs-scripting-python-import.c>
       obs-scripting-python-import.h
       obs-scripting-python.c
       obs-scripting-python.h
@@ -43,12 +41,11 @@ if(ENABLE_SCRIPTING_PYTHON)
 
   target_include_directories(
     obs-scripting
-    PRIVATE "$<$<PLATFORM_ID:Windows,Darwin>:$<TARGET_PROPERTY:Python::Python,INTERFACE_INCLUDE_DIRECTORIES>>"
+    PRIVATE "$<$<PLATFORM_ID:Windows>:$<TARGET_PROPERTY:Python::Python,INTERFACE_INCLUDE_DIRECTORIES>>"
   )
 
   target_link_libraries(obs-scripting PRIVATE $<$<PLATFORM_ID:Linux,FreeBSD,OpenBSD>:Python::Python>)
 
-  target_link_options(obs-scripting PRIVATE $<$<PLATFORM_ID:Darwin>:LINKER:-undefined,dynamic_lookup>)
 else()
   target_disable_feature(obs-scripting "Python scripting support")
 endif()

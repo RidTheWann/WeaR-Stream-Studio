@@ -42,7 +42,6 @@ target_link_libraries(
     OBS::cstrcache
     $<$<BOOL:${ENABLE_FRONTEND}>:OBS::frontend-api>
     $<$<PLATFORM_ID:Windows>:OBS::w32-pthreads>
-    $<$<PLATFORM_ID:Darwin>:objc>
 )
 
 if(OS_WINDOWS)
@@ -52,6 +51,6 @@ endif()
 
 set_target_properties_obs(obs-scripting PROPERTIES FOLDER scripting)
 
-if(OS_WINDOWS OR OS_MACOS)
+if(OS_WINDOWS)
   set_property(TARGET obs-scripting PROPERTY PREFIX "")
 endif()

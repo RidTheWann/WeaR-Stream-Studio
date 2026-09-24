@@ -6,10 +6,6 @@ endif()
 
 find_package(Qt6 REQUIRED Widgets)
 
-if(OS_LINUX OR OS_FREEBSD OR OS_OPENBSD)
-  find_package(X11 REQUIRED)
-endif()
-
 add_library(decklink-output-ui MODULE)
 add_library(OBS::decklink-output-ui ALIAS decklink-output-ui)
 
@@ -24,8 +20,6 @@ target_sources(
   PRIVATE DecklinkOutputUI.cpp DecklinkOutputUI.h decklink-ui-main.cpp decklink-ui-main.h
 )
 
-target_compile_options(decklink-output-ui PRIVATE $<$<PLATFORM_ID:Darwin>:-Wno-quoted-include-in-framework-header>)
-
 target_link_libraries(
   decklink-output-ui
   PRIVATE
@@ -33,8 +27,6 @@ target_link_libraries(
     OBS::frontend-api
     OBS::properties-view
     Qt::Widgets
-    "$<$<PLATFORM_ID:Darwin>:$<LINK_LIBRARY:FRAMEWORK,Cocoa.framework>>"
-    $<$<PLATFORM_ID:Linux,FreeBSD,OpenBSD>:X11::X11>
 )
 
 if(OS_WINDOWS)

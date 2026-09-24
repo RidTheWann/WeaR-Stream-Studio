@@ -12,18 +12,14 @@ if(POLICY CMP0094)
   cmake_policy(SET CMP0094 NEW)
 endif()
 
-if(OS_LINUX OR OS_FREEBSD OR OS_OPENBSD)
-  find_package(Python 3.8 REQUIRED Interpreter Development)
-else()
-  find_package(Python 3.8...<3.12 REQUIRED Interpreter Development)
-endif()
+find_package(Python 3.8...<3.12 REQUIRED Interpreter Development)
 find_package(SWIG 4 REQUIRED)
 
 include(UseSWIG)
 
 set_source_files_properties(
   obspython.i
-  PROPERTIES USE_TARGET_INCLUDE_DIRECTORIES TRUE SWIG_FLAGS $<$<PLATFORM_ID:Windows,Darwin>:-py3-stable-abi>
+  PROPERTIES USE_TARGET_INCLUDE_DIRECTORIES TRUE SWIG_FLAGS $<$<PLATFORM_ID:Windows>:-py3-stable-abi>
 )
 
 swig_add_library(obspython LANGUAGE python TYPE MODULE SOURCES obspython.i)
@@ -39,7 +35,6 @@ target_include_directories(
   obspython
   PRIVATE
     "$<$<PLATFORM_ID:Windows>:${CMAKE_CURRENT_BINARY_DIR}/$<CONFIG>>"
-    "$<$<PLATFORM_ID:Darwin>:$<TARGET_PROPERTY:Python::Python,INTERFACE_INCLUDE_DIRECTORIES>>"
 )
 
 target_compile_options(
@@ -70,6 +65,8 @@ target_link_libraries(
     $<$<BOOL:${ENABLE_FRONTEND}>:OBS::frontend-api>
     $<$<NOT:$<PLATFORM_ID:Darwin>>:Python::Python>
 )
+
+target_link_options(obspython PRIVATE $<$<PLATFORM_ID:Darwin>:LINKER:-undefined,dynamic_lookup>)
 
 target_link_options(obspython PRIVATE $<$<PLATFORM_ID:Darwin>:LINKER:-undefined,dynamic_lookup>)
 

@@ -66,8 +66,7 @@ target_compile_definitions(obs-outputs PRIVATE USE_MBEDTLS CRYPTO)
 target_compile_options(
   obs-outputs
   PRIVATE
-    $<$<COMPILE_LANG_AND_ID:C,AppleClang,Clang>:-Wno-comma>
-    $<$<AND:$<PLATFORM_ID:Linux,FreeBSD,OpenBSD>,$<COMPILE_LANG_AND_ID:C,Clang>>:-Wno-error=unreachable-code>
+    $<$<COMPILE_LANG_AND_ID:C,Clang>:-Wno-comma>
 )
 
 target_link_libraries(
@@ -85,8 +84,6 @@ target_link_libraries(
     $<$<PLATFORM_ID:Windows>:iphlpapi>
     $<$<PLATFORM_ID:Windows>:winmm>
     $<$<PLATFORM_ID:Windows>:ws2_32>
-    "$<$<PLATFORM_ID:Darwin>:$<LINK_LIBRARY:FRAMEWORK,Foundation.framework>>"
-    "$<$<PLATFORM_ID:Darwin>:$<LINK_LIBRARY:FRAMEWORK,Security.framework>>"
 )
 
 # Remove once jansson has been fixed on obs-deps

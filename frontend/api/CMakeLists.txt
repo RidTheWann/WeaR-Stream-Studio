@@ -12,13 +12,11 @@ target_include_directories(obs-frontend-api PUBLIC "$<BUILD_INTERFACE:${CMAKE_CU
 if(OS_WINDOWS)
   configure_file(cmake/windows/obs-module.rc.in obs-frontend-api.rc)
   target_sources(obs-frontend-api PRIVATE obs-frontend-api.rc)
-elseif(OS_MACOS)
-  set_target_properties(obs-frontend-api PROPERTIES SOVERSION 1)
 endif()
 
 set_target_properties_obs(obs-frontend-api PROPERTIES FOLDER frontend PUBLIC_HEADER obs-frontend-api.h)
 
-if(OS_WINDOWS OR OS_MACOS)
+if(OS_WINDOWS)
   set_property(TARGET obs-frontend-api PROPERTY PREFIX "")
 endif()
 

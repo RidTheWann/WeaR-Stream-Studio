@@ -39,9 +39,7 @@ target_sources(
     obs-avc.h
     obs-canvas.c
     obs-config.h
-    $<$<PLATFORM_ID:Darwin>:obs-core-modules-loader-mac.m>
     $<$<PLATFORM_ID:Windows>:obs-core-modules-loader-win.c>
-    $<$<PLATFORM_ID:Linux,FreeBSD,OpenBSD>:obs-core-modules-loader-nix.c>
     obs-core-modules-loader.h
     obs-data.c
     obs-data.h
@@ -263,12 +261,6 @@ target_link_libraries(
 
 if(OS_WINDOWS)
   include(cmake/os-windows.cmake)
-elseif(OS_MACOS)
-  include(cmake/os-macos.cmake)
-elseif(OS_LINUX)
-  include(cmake/os-linux.cmake)
-elseif(OS_FREEBSD OR OS_OPENBSD)
-  include(cmake/os-freebsd.cmake)
 endif()
 
 configure_file(obsconfig.h.in "${CMAKE_BINARY_DIR}/config/obsconfig.h" @ONLY)
@@ -325,7 +317,6 @@ set(
   obs-missing-files.h
   obs-module.h
   obs-nal.h
-  obs-nix-platform.h
   obs-output.h
   obs-properties.h
   obs-service.h
@@ -376,8 +367,6 @@ if(OS_WINDOWS)
     util/windows/window-helpers.h
     util/windows/WinHandle.hpp
   )
-elseif(OS_MACOS)
-  list(APPEND public_headers util/apple/cfstring-utils.h)
 endif()
 
 if(ENABLE_HEVC)

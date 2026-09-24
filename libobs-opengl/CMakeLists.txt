@@ -7,26 +7,9 @@ if(NOT TARGET OBS::glad)
   add_subdirectory("${CMAKE_SOURCE_DIR}/deps/glad" "${CMAKE_BINARY_DIR}/deps/glad")
 endif()
 
-if(OS_LINUX OR OS_FREEBSD OR OS_OPENBSD)
-  find_package(Libdrm REQUIRED)
-  find_package(X11 REQUIRED)
-  find_package(XCB REQUIRED XCB)
-  find_package(X11_XCB REQUIRED)
-
-  if(ENABLE_WAYLAND)
-    find_package(OpenGL REQUIRED EGL)
-    find_package(Wayland REQUIRED)
-  endif()
-endif()
-
 target_sources(
   libobs-opengl
   PRIVATE
-    $<$<AND:$<PLATFORM_ID:Linux,FreeBSD,OpenBSD>,$<BOOL:${ENABLE_WAYLAND}>>:gl-wayland-egl.c>
-    $<$<PLATFORM_ID:Darwin>:gl-cocoa.m>
-    $<$<PLATFORM_ID:Linux,FreeBSD,OpenBSD>:gl-egl-common.c>
-    $<$<PLATFORM_ID:Linux,FreeBSD,OpenBSD>:gl-nix.c>
-    $<$<PLATFORM_ID:Linux,FreeBSD,OpenBSD>:gl-x11-egl.c>
     $<$<PLATFORM_ID:Windows>:gl-windows.c>
     gl-helpers.c
     gl-helpers.h
@@ -44,22 +27,13 @@ target_sources(
     gl-zstencil.c
 )
 
-target_compile_options(libobs-opengl PRIVATE $<$<COMPILE_LANG_AND_ID:C,AppleClang,Clang>:-Wno-strict-prototypes>)
-
-target_compile_definitions(libobs-opengl PRIVATE $<$<PLATFORM_ID:Darwin>:GL_SILENCE_DEPRECATION>)
+target_compile_options(libobs-opengl PRIVATE $<$<COMPILE_LANG_AND_ID:C,Clang>:-Wno-strict-prototypes>)
 
 target_link_libraries(
   libobs-opengl
   PRIVATE
     OBS::libobs
     OBS::glad
-    "$<$<PLATFORM_ID:Darwin>:$<LINK_LIBRARY:FRAMEWORK,Cocoa.framework>>"
-    "$<$<PLATFORM_ID:Darwin>:$<LINK_LIBRARY:FRAMEWORK,IOSurface.framework>>"
-    $<$<PLATFORM_ID:Linux,FreeBSD,OpenBSD>:Libdrm::Libdrm>
-    $<$<PLATFORM_ID:Linux,FreeBSD,OpenBSD>:XCB::XCB>
-    $<$<PLATFORM_ID:Linux,FreeBSD,OpenBSD>:X11::XCB>
-    $<$<AND:$<PLATFORM_ID:Linux,FreeBSD,OpenBSD>,$<BOOL:${ENABLE_WAYLAND}>>:OpenGL::EGL>
-    $<$<AND:$<PLATFORM_ID:Linux,FreeBSD,OpenBSD>,$<BOOL:${ENABLE_WAYLAND}>>:Wayland::Egl>
 )
 
 if(OS_WINDOWS)

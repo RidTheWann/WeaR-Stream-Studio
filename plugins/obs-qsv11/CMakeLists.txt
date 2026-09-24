@@ -11,14 +11,9 @@ add_library(OBS::qsv11 ALIAS obs-qsv11)
 
 find_package(VPL 2.9 REQUIRED)
 
-if(OS_LINUX)
-  find_package(Libva REQUIRED)
-endif()
-
 target_sources(
   obs-qsv11
   PRIVATE
-    $<$<PLATFORM_ID:Linux>:common_utils_linux.cpp>
     $<$<PLATFORM_ID:Windows>:common_directx11.cpp>
     $<$<PLATFORM_ID:Windows>:common_directx11.h>
     $<$<PLATFORM_ID:Windows>:common_utils_windows.cpp>
@@ -44,8 +39,6 @@ target_link_libraries(
   PRIVATE
     OBS::libobs
     VPL::VPL
-    $<$<PLATFORM_ID:Linux>:Libva::va>
-    $<$<PLATFORM_ID:Linux>:Libva::drm>
     $<$<PLATFORM_ID:Windows>:d3d11>
     $<$<PLATFORM_ID:Windows>:dxgi>
     $<$<PLATFORM_ID:Windows>:dxguid>

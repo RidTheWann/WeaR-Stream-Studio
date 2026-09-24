@@ -180,9 +180,6 @@ if(LibAJANTV2_FOUND)
           $<$<PLATFORM_ID:Windows>:wbemuuid.lib>
           $<$<PLATFORM_ID:Windows>:winmm.lib>
           $<$<PLATFORM_ID:Windows>:ws2_32.lib>
-          "$<$<PLATFORM_ID:Darwin>:$<LINK_LIBRARY:FRAMEWORK,AppKit.framework>>"
-          "$<$<PLATFORM_ID:Darwin>:$<LINK_LIBRARY:FRAMEWORK,CoreFoundation.framework>>"
-          "$<$<PLATFORM_ID:Darwin>:$<LINK_LIBRARY:FRAMEWORK,IOKit.framework>>"
     )
     set_property(
       TARGET AJA::LibAJANTV2
@@ -191,8 +188,6 @@ if(LibAJANTV2_FOUND)
         INTERFACE_COMPILE_DEFINITIONS
           "$<$<BOOL:${OS_WINDOWS}>:AJA_WINDOWS;_WINDOWS;WIN32;MSWindows>"
           "$<$<AND:$<BOOL:${OS_WINDOWS}>,$<CONFIG:DEBUG>>:_DEBUG;_NDEBUG>"
-          "$<$<BOOL:${OS_MACOS}>:AJAMac;AJA_MAC>"
-          "$<$<BOOL:${OS_LINUX}>:AJA_LINUX;AJALinux>"
     )
   endif()
 endif()

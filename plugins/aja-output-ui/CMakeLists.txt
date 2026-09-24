@@ -8,10 +8,6 @@ find_package(LibAJANTV2 REQUIRED)
 
 find_package(Qt6 REQUIRED Widgets)
 
-if(OS_LINUX OR OS_FREEBSD OR OS_OPENBSD)
-  find_package(X11 REQUIRED)
-endif()
-
 if(NOT TARGET OBS::aja-support)
   add_subdirectory("${CMAKE_SOURCE_DIR}/plugins/aja" "${CMAKE_BINARY_DIR}/plugins/aja")
 endif()
@@ -43,7 +39,6 @@ target_link_libraries(
     OBS::properties-view
     Qt::Widgets
     AJA::LibAJANTV2
-    $<$<PLATFORM_ID:Linux,FreeBSD,OpenBSD>:X11::X11>
 )
 
 target_link_options(aja-output-ui PRIVATE $<$<PLATFORM_ID:Windows>:/IGNORE:4099>)

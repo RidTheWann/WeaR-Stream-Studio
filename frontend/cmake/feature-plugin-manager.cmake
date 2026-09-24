@@ -22,17 +22,6 @@ target_sources(
 
 if(OS_WINDOWS)
   target_sources(obs-studio PRIVATE plugin-manager/PluginModuleLoader_Windows.cpp)
-elseif(OS_MACOS)
-  target_sources(obs-studio PRIVATE plugin-manager/PluginModuleLoader_MacOS.mm)
-elseif(OS_FLATPAK)
-  configure_file(plugin-manager/LoaderPaths_Flatpak.hpp.in LoaderPaths_Flatpak.hpp @ONLY)
-  target_sources(obs-studio PRIVATE plugin-manager/PluginModuleLoader_Flatpak.cpp LoaderPaths_Flatpak.hpp)
-elseif(OS_LINUX)
-  configure_file(plugin-manager/LoaderPaths_Linux.hpp.in LoaderPaths_Linux.hpp @ONLY)
-  target_sources(obs-studio PRIVATE plugin-manager/PluginModuleLoader_Linux.cpp LoaderPaths_Linux.hpp)
-elseif(OS_FREEBSD OR OS_OPENBSD)
-  configure_file(plugin-manager/LoaderPaths_BSD.hpp.in LoaderPaths_BSD.hpp @ONLY)
-  target_sources(obs-studio PRIVATE plugin-manager/PluginModuleLoader_BSD.cpp LoaderPaths_BSD.hpp)
 endif()
 
 target_link_libraries(obs-studio PRIVATE nlohmann_json::nlohmann_json)

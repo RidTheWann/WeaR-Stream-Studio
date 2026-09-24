@@ -2,10 +2,6 @@ cmake_minimum_required(VERSION 3.28...3.30)
 
 find_package(Qt6 REQUIRED Widgets)
 
-if(OS_LINUX OR OS_FREEBSD OR OS_OPENBSD)
-  find_package(X11 REQUIRED)
-endif()
-
 add_library(frontend-tools MODULE)
 add_library(OBS::frontend-tools ALIAS frontend-tools)
 
@@ -24,8 +20,6 @@ endif()
 target_sources(
   frontend-tools
   PRIVATE
-    $<$<PLATFORM_ID:Darwin>:auto-scene-switcher-osx.mm>
-    $<$<PLATFORM_ID:Linux,FreeBSD,OpenBSD>:auto-scene-switcher-nix.cpp>
     $<$<PLATFORM_ID:Windows>:auto-scene-switcher-win.cpp>
     $<$<PLATFORM_ID:Windows>:captions-handler.cpp>
     $<$<PLATFORM_ID:Windows>:captions-handler.hpp>
@@ -48,11 +42,6 @@ target_sources(
   PRIVATE forms/auto-scene-switcher.ui forms/captions.ui forms/output-timer.ui forms/scripts.ui
 )
 
-target_compile_options(
-  frontend-tools
-  PRIVATE $<$<PLATFORM_ID:Darwin>:-Wno-quoted-include-in-framework-header> $<$<PLATFORM_ID:Darwin>:-Wno-comma>
-)
-
 target_link_libraries(
   frontend-tools
   PRIVATE
@@ -62,8 +51,6 @@ target_link_libraries(
     OBS::qt-plain-text-edit
     OBS::qt-wrappers
     Qt::Widgets
-    "$<$<PLATFORM_ID:Darwin>:$<LINK_LIBRARY:FRAMEWORK,Cocoa>>"
-    $<$<PLATFORM_ID:Linux,FreeBSD,OpenBSD>:X11::X11>
 )
 
 add_subdirectory("${CMAKE_SOURCE_DIR}/shared/obs-scripting" "${CMAKE_BINARY_DIR}/shared/obs-scripting")
@@ -84,10 +71,9 @@ endif()
 set_target_properties_obs(
   frontend-tools
   PROPERTIES FOLDER plugins/frontend-tools
-             PREFIX ""
-             AUTOMOC ON
-             AUTOUIC ON
-             AUTORCC ON
-             AUTOUIC_SEARCH_PATHS forms
-             XCODE_ATTRIBUTE_CLANG_ENABLE_OBJC_ARC YES
+              PREFIX ""
+              AUTOMOC ON
+              AUTOUIC ON
+              AUTORCC ON
+              AUTOUIC_SEARCH_PATHS forms
 )

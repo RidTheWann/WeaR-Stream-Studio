@@ -1,7 +1,7 @@
 option(ENABLE_RNNOISE "Enable building with RNNoise noise supression filter" ON)
 
 if(ENABLE_RNNOISE)
-  if(OS_WINDOWS OR OS_MACOS)
+  if(OS_WINDOWS)
     find_package(Librnnoise REQUIRED)
   else()
     find_package(Librnnoise)

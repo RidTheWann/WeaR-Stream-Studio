@@ -493,13 +493,6 @@ function(add_core_module target)
         if("${architecture}" STREQUAL CMAKE_VS_PLATFORM_NAME)
           set(found_architecture TRUE)
         endif()
-      elseif(OS_MACOS)
-        if(
-          "${architecture}" IN_LIST CMAKE_OSX_ARCHITECTURES
-          OR "${architecture}" STREQUAL "${CMAKE_HOST_SYSTEM_PROCESSOR}"
-        )
-          set(found_architecture TRUE)
-        endif()
       elseif("${architecture}" STREQUAL CMAKE_SYSTEM_PROCESSOR)
         set(found_architecture TRUE)
       endif()

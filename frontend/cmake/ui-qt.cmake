@@ -1,9 +1,5 @@
 find_package(Qt6 REQUIRED Widgets Network Svg Xml)
 
-if(OS_LINUX OR OS_FREEBSD OR OS_OPENBSD)
-  find_package(Qt6 REQUIRED Gui DBus)
-endif()
-
 if(NOT TARGET OBS::qt-wrappers)
   add_subdirectory("${CMAKE_SOURCE_DIR}/shared/qt/wrappers" "${CMAKE_BINARY_DIR}/shared/qt/wrappers")
 endif()

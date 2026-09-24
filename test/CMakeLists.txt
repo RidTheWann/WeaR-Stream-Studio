@@ -4,10 +4,6 @@ if(BUILD_TESTS)
   if(OS_WINDOWS)
     add_subdirectory(win)
   endif()
-
-  if(OS_MACOS)
-    add_subdirectory(osx)
-  endif()
 endif()
 
 if(ENABLE_UNIT_TESTS)

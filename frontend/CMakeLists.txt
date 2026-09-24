@@ -78,15 +78,9 @@ target_sources(
 
 if(OS_WINDOWS)
   include(cmake/os-windows.cmake)
-elseif(OS_MACOS)
-  include(cmake/os-macos.cmake)
-elseif(OS_LINUX)
-  include(cmake/os-linux.cmake)
-elseif(OS_FREEBSD OR OS_OPENBSD)
-  include(cmake/os-freebsd.cmake)
 endif()
 
-foreach(graphics_library IN ITEMS opengl metal d3d11)
+foreach(graphics_library IN ITEMS opengl d3d11)
   string(TOUPPER ${graphics_library} graphics_library_U)
   if(TARGET OBS::libobs-${graphics_library})
     target_compile_definitions(

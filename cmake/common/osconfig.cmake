@@ -1,4 +1,5 @@
 # OBS CMake operating system bootstrap module
+# WeaR Stream Studio: Windows-only fork. Non-Windows branches removed (phase 1).
 
 include_guard(GLOBAL)
 
@@ -7,23 +8,6 @@ if(CMAKE_HOST_SYSTEM_NAME STREQUAL "Windows")
   set(CMAKE_CXX_EXTENSIONS FALSE)
   list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/windows")
   set(OS_WINDOWS TRUE)
-elseif(CMAKE_HOST_SYSTEM_NAME STREQUAL "Darwin")
-  set(CMAKE_C_EXTENSIONS FALSE)
-  set(CMAKE_CXX_EXTENSIONS FALSE)
-  list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/macos")
-  set(OS_MACOS TRUE)
-elseif(CMAKE_HOST_SYSTEM_NAME MATCHES "Linux|FreeBSD|OpenBSD")
-  set(CMAKE_CXX_EXTENSIONS FALSE)
-  list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/linux")
-  string(TOUPPER "${CMAKE_HOST_SYSTEM_NAME}" _SYSTEM_NAME_U)
-  set(OS_${_SYSTEM_NAME_U} TRUE)
-
-  option(ENABLE_FLATPAK "Enable Flatpak-specific implementations." OFF)
-  mark_as_advanced(ENABLE_FLATPAK)
-
-  if(OS_LINUX AND ENABLE_FLATPAK)
-    set(OS_FLATPAK TRUE)
-  else()
-    set(OS_FLATPAK FALSE)
-  endif()
+else()
+  message(FATAL_ERROR "WeaR Stream Studio supports Windows hosts only.")
 endif()

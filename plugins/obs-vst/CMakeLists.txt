@@ -14,10 +14,6 @@ find_package(Qt6 REQUIRED Widgets)
 target_sources(
   obs-vst
   PRIVATE
-    $<$<PLATFORM_ID:Darwin>:mac/EditorWidget-osx.mm>
-    $<$<PLATFORM_ID:Darwin>:mac/VSTPlugin-osx.mm>
-    $<$<PLATFORM_ID:Linux,FreeBSD,OpenBSD>:linux/EditorWidget-linux.cpp>
-    $<$<PLATFORM_ID:Linux,FreeBSD,OpenBSD>:linux/VSTPlugin-linux.cpp>
     $<$<PLATFORM_ID:Windows>:win/EditorWidget-win.cpp>
     $<$<PLATFORM_ID:Windows>:win/VSTPlugin-win.cpp>
     EditorWidget.cpp
@@ -36,8 +32,6 @@ target_link_libraries(
   PRIVATE
     OBS::libobs
     Qt::Widgets
-    "$<$<PLATFORM_ID:Darwin>:$<LINK_LIBRARY:FRAMEWORK,Cocoa.framework>>"
-    "$<$<PLATFORM_ID:Darwin>:$<LINK_LIBRARY:FRAMEWORK,Foundation.framework>>"
 )
 
 if(OS_WINDOWS)
