@@ -44,16 +44,24 @@ function Package {
 
     Install-BuildDependencies -WingetFile "${ScriptHome}/.Wingetfile"
 
-    $GitDescription = Invoke-External git describe --tags --long
-    $Tokens = ($GitDescription -split '-')
-    $CommitVersion = $Tokens[0..$($Tokens.Count - 3)] -join '-'
-    $CommitHash = $($Tokens[-1]).SubString(1)
-    $CommitDistance = $Tokens[-2]
+    # Untagged checkouts have no `git describe` output: fall back to the
+    # commit SHA so packaging never fails for lack of tags (phase 4 fix).
+    $GitDescription = git describe --tags --long --always 2>$null
 
-    if ( $CommitDistance -gt 0 ) {
-        $OutputName = "wear-stream-studio-${CommitVersion}-${CommitHash}"
+    if ($LASTEXITCODE -eq 0 -and
+        $GitDescription -match '^(?<version>.+)-(?<distance>\d+)-g(?<hash>[0-9a-fA-F]+)$') {
+        $CommitVersion = $Matches.version
+        $CommitDistance = [int]$Matches.distance
+        $CommitHash = $Matches.hash
+
+        if ( $CommitDistance -gt 0 ) {
+            $OutputName = "wear-stream-studio-${CommitVersion}-${CommitHash}"
+        } else {
+            $OutputName = "wear-stream-studio-${CommitVersion}"
+        }
     } else {
-        $OutputName = "wear-stream-studio-${CommitVersion}"
+        $CommitHash = $env:GITHUB_SHA.Substring(0, 8)
+        $OutputName = "wear-stream-studio-untagged-${CommitHash}"
     }
 
     $CpackArgs = @(
