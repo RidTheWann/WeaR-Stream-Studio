@@ -84,7 +84,9 @@ void OBSBasic::on_resetDocks_triggered(bool force)
 
 	ui->scenesDock->setVisible(true);
 	ui->sourcesDock->setVisible(true);
-	ui->mixerDock->setVisible(true);
+	/* WeaR first-run default (phase 7c): mixer hidden for a slimmer start.
+	 * Still toggleable via the Docks menu; objectNames unchanged. */
+	ui->mixerDock->setVisible(false);
 	ui->transitionsDock->setVisible(true);
 	controlsDock->setVisible(true);
 	statsDock->setVisible(false);

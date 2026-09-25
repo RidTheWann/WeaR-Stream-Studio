@@ -1,0 +1,83 @@
+/* ------------------------------------------------------------------------- *
+ *                                                                           *
+ *                            WeaRDark Variant Theme                         *
+ *                          WeaR Stream Studio (phase 7b)                    *
+ *                                                                           *
+ * Variant of Yami: inherits all widget styling, overrides brand tokens.   *
+ *                                                                           *
+ * Brand tokens (from logo, do not freestyle):                              *
+ *   cyan #3FC6CC · blue #0342CA (workhorse accent) · violet #553FD5        *
+ *   magenta #BF48D9                                                        *
+ * Neutrals (brand-blue hue ~221deg): bg #121317 · panel #1B1D21 ·          *
+ *   elevated #24262B · border #34373D · text #EBEEF5 · secondary #D3D8E5   *
+ *                                                                           *
+ * Scope rules: gradient ONLY on Start Streaming/Recording buttons.        *
+ * Everything else active/selected/link/focus uses solid #0342CA.          *
+ * rec-red / live-green keep OBS values (untouched). Radius 8px panels &   *
+ * buttons, 4px small chips, 0px video preview. New colors are tuned from  *
+ * screenshots, not from this file alone.                                  *
+ *                                                                           *
+ * ------------------------------------------------------------------------- */
+
+@OBSThemeMeta {
+    name: 'WeaRDark';
+    id: 'com.wearstudio.WeARDark';
+    extends: 'com.obsproject.Yami';
+    author: 'WeaR Studio';
+    dark: 'true';
+}
+
+@OBSThemeVars {
+    /* Neutrals */
+    --bg_window: #121317;
+    --bg_base: #1B1D21;
+    --bg_preview: #0B0C0F;
+
+    --border_color: #34373D;
+
+    --input_bg: #24262B;
+    --input_bg_hover: #24262B;
+    --input_bg_focus: #24262B;
+    --button_bg_hover: #2E3238;
+    --button_bg_down: #1B1D21;
+
+    /* Workhorse accent: solid brand blue */
+    --primary: #0342CA;
+    --primary_light: #553FD5;
+    --primary_lighter: #BF48D9;
+    --primary_dark: #022E9E;
+    --primary_darker: #022072;
+
+    --highlight_color: #0342CA;
+
+    /* Text */
+    --text: #EBEEF5;
+    --text_light: #EBEEF5;
+    --text_muted: #D3D8E5;
+
+    /* Radius */
+    --border_radius: 8px;
+    --border_radius_small: 4px;
+    --border_radius_large: 8px;
+}
+
+/* Start Streaming / Start Recording: the ONLY gradient element in the UI */
+#streamButton:!hover:!pressed.state-active,
+#recordButton:!hover:!pressed.state-active {
+    background: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0, stop: 0 #3FC6CC, stop: 0.5 #0342CA, stop: 1 #553FD5);
+    color: #EBEEF5;
+    border-radius: var(--border_radius);
+}
+
+#streamButton:hover:!pressed.state-active,
+#recordButton:hover:!pressed.state-active {
+    background: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0, stop: 0 #3FC6CC, stop: 0.5 #0342CA, stop: 1 #553FD5);
+    color: #FFFFFF;
+    border-color: var(--primary_lighter);
+    border-radius: var(--border_radius);
+}
+
+/* Video preview must never be rounded: it is content, not chrome */
+OBSQTDisplay {
+    border-radius: 0px;
+}
