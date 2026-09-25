@@ -31,11 +31,8 @@ VCamFilter::VCamFilter() : OutputFilter()
 		file[0] = 0;
 	}
 
-#ifdef _WIN64
-	const wchar_t *obs_process = L"obs64.exe";
-#else
-	const wchar_t *obs_process = L"obs32.exe";
-#endif
+	/* Detect if this filter runs inside the main application process. */
+	const wchar_t *obs_process = L"wear-stream-studio.exe";
 
 	in_obs = !!wcsstr(file, obs_process);
 

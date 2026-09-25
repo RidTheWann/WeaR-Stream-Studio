@@ -31,7 +31,7 @@ sign_append = true
 # PDBs to not strip
 exclude = [
     "obs-frontend-api.pdb",
-    "obs64.pdb",
+    "wear-stream-studio.pdb",
     "obs.pdb",
 ]
 
@@ -40,8 +40,8 @@ exclude = [
 skip = true
 
 [package.zip]
-name = "OBS-Studio-{version}-arm64.zip"
-pdb_name = "OBS-Studio-{version}-arm64-pdbs.zip"
+name = "WeaR-Stream-Studio-{version}-arm64.zip"
+pdb_name = "WeaR-Stream-Studio-{version}-arm64-pdbs.zip"
 
 [package.updater]
 skip_sign = true
