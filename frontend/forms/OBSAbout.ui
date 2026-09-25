@@ -60,9 +60,9 @@
        <property name="text">
         <string/>
        </property>
-       <property name="pixmap">
-        <pixmap>:res/images/obs.png</pixmap>
-       </property>
+        <property name="pixmap">
+         <pixmap>:res/images/wear-mark.png</pixmap>
+        </property>
        <property name="scaledContents">
         <bool>true</bool>
        </property>
