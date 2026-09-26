@@ -326,6 +326,13 @@ function(target_install_resources target)
       DESTINATION "${target_destination}"
       USE_SOURCE_PERMISSIONS
       COMPONENT Runtime
+      # WeaR Stream Studio (phase 8): ship only WeaR themes. Yami base +
+      # shared assets stay (our variants extend Yami internally).
+      PATTERN "Yami_*.ovt" EXCLUDE
+      PATTERN "System.obt" EXCLUDE
+      PATTERN "Acri" EXCLUDE
+      PATTERN "Light" EXCLUDE
+      PATTERN "Rachni" EXCLUDE
     )
 
     add_custom_command(
