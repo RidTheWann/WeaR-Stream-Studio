@@ -237,16 +237,17 @@ OBSBasic::OBSBasic(QWidget *parent) : OBSMainWindow(parent), undo_s(ui), ui(new 
 	connect(ui->transitionDuration, &QSpinBox::valueChanged, this,
 		[this](int value) { SetTransitionDuration(value); });
 
-	/* Main window default layout */
+	/* Main window default layout — OBS + Streamlabs hybrid:
+	 * left scenes/sources, right compact controls, bottom mixer. */
 	setDockCornersVertical(true);
 
-	/* Scenes and Sources dock on left
-	 * This specific arrangement can't be set up in Qt Designer */
 	addDockWidget(Qt::LeftDockWidgetArea, ui->scenesDock);
 	splitDockWidget(ui->scenesDock, ui->sourcesDock, Qt::Vertical);
-	int sideDockWidth = std::min(width() * 30 / 100, 320);
+	int sideDockWidth = std::min(width() * 22 / 100, 240);
 	resizeDocks({ui->scenesDock, ui->sourcesDock}, {sideDockWidth, sideDockWidth}, Qt::Horizontal);
-	addDockWidget(Qt::BottomDockWidgetArea, controlsDock);
+	addDockWidget(Qt::RightDockWidgetArea, controlsDock);
+	int controlWidth = std::min(width() * 18 / 100, 220);
+	resizeDocks({controlsDock}, {controlWidth}, Qt::Horizontal);
 
 	startingDockLayout = saveState();
 
@@ -1984,7 +1985,7 @@ void OBSBasic::UpdateTitleBar()
 	const char *profile = config_get_string(App()->GetUserConfig(), "Basic", "Profile");
 	const char *sceneCollection = config_get_string(App()->GetUserConfig(), "Basic", "SceneCollection");
 
-	name << "WeaR Stream Studio ";
+	name << "WeaR Stream ";
 
 	name << App()->GetVersionString(false);
 	if (safe_mode) {

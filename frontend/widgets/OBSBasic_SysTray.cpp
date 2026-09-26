@@ -26,7 +26,7 @@ void OBSBasic::SystemTrayInit()
 	// Windows-only fork: macOS tray mask icon removed (phase 3).
 	QIcon trayIconFile = QIcon(":/res/images/obs.png");
 	trayIcon = new QSystemTrayIcon(QIcon::fromTheme("obs-tray", trayIconFile), this);
-	trayIcon->setToolTip("WeaR Stream Studio");
+	trayIcon->setToolTip("WeaR Stream");
 
 	trayMenu = new QMenu(this);
 
@@ -98,7 +98,7 @@ void OBSBasic::SysTrayNotify(const QString &text, QSystemTrayIcon::MessageIcon n
 {
 	if (trayIcon && trayIcon->isVisible() && QSystemTrayIcon::supportsMessages()) {
 		QSystemTrayIcon::MessageIcon icon = QSystemTrayIcon::MessageIcon(n);
-		trayIcon->showMessage("WeaR Stream Studio", text, icon, 10000);
+		trayIcon->showMessage("WeaR Stream", text, icon, 10000);
 	}
 }
 

@@ -69,10 +69,10 @@ void OBSAbout::ShowAbout()
 {
 	QString text;
 
-	text += "<h1>WeaR Stream Studio</h1>";
-	text += "<p style=\"font-size:16px;\">";
+	text += "<h1>WeaR Stream</h1>";
+	text += "<p style=\"font-size:14px;\">";
 	text += "Free and open source video recording and live streaming software.<br/>";
-	text += "Based on OBS Studio by the OBS Project, licensed under GPLv2.<br/>";
+	text += "Powered by OBS Studio by the OBS Project, licensed under GPLv2.<br/>";
 	text += "<a href=\"https://github.com/RidTheWann/WeaR-Stream-Studio\">";
 	text += "https://github.com/RidTheWann/WeaR-Stream-Studio</a>";
 	text += "</p>";

@@ -78,27 +78,25 @@ void OBSBasic::on_resetDocks_triggered(bool force)
 	ui->sideDocks->setChecked(true);
 
 	int cx = width();
-	int bottomDocksHeight = height();
-
-	bottomDocksHeight = bottomDocksHeight * 225 / 1000;
+	int bottomDocksHeight = height() * 180 / 1000;
 
 	ui->scenesDock->setVisible(true);
 	ui->sourcesDock->setVisible(true);
-	/* WeaR first-run default (phase 7c): mixer hidden for a slimmer start.
-	 * Still toggleable via the Docks menu; objectNames unchanged. */
-	ui->mixerDock->setVisible(false);
+	ui->mixerDock->setVisible(true);
 	ui->transitionsDock->setVisible(true);
 	controlsDock->setVisible(true);
 	statsDock->setVisible(false);
 	statsDock->setFloating(true);
 
-	QList<QDockWidget *> bottomDocks{ui->mixerDock, ui->transitionsDock, controlsDock};
+	QList<QDockWidget *> bottomDocks{ui->mixerDock, ui->transitionsDock};
+	resizeDocks(bottomDocks, {bottomDocksHeight, bottomDocksHeight}, Qt::Vertical);
+	resizeDocks(bottomDocks, {cx * 74 / 100, cx * 26 / 100}, Qt::Horizontal);
 
-	resizeDocks(bottomDocks, {bottomDocksHeight, bottomDocksHeight, bottomDocksHeight}, Qt::Vertical);
-	resizeDocks(bottomDocks, {cx * 45 / 100, cx * 14 / 100, cx * 16 / 100}, Qt::Horizontal);
-
-	int sideDockWidth = std::min(width() * 30 / 100, 280);
+	int sideDockWidth = std::min(width() * 22 / 100, 240);
 	resizeDocks({ui->scenesDock, ui->sourcesDock}, {sideDockWidth, sideDockWidth}, Qt::Horizontal);
+
+	int controlWidth = std::min(width() * 18 / 100, 220);
+	resizeDocks({controlsDock}, {controlWidth}, Qt::Horizontal);
 
 	activateWindow();
 }
